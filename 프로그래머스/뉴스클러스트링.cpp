@@ -36,7 +36,7 @@ int solution(string str1, string str2) {
     vector<string>::iterator it = set_intersection(S1.begin(), S1.end(), S2.begin(), S2.end(), S3.begin());
     S3.erase(it, S3.end()); //미리 정해둔 사이즈. set_intersection의 반환값은 dset 벡터의 마지막 위치이다.
     intersection = S3.size();
-    sum = sz1 + sz2 - intersection;
+    sum = sz1 + sz2 - intersection; // 합집합의 크기는 두 집합의 크기의 합에서 교집합의 크기를 빼준다.
     if (sum == 0)
         return 65536;
     else
