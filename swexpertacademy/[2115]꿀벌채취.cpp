@@ -14,6 +14,7 @@ void init()
 	answer = 0;
 }
 
+//calMAX1과 2를 합치면 좀 덜 지저분할거같은데...
 void calMAX1(vector<int> vec, int index, int sum, int ans)
 {
 	ans1 = max(ans, ans1);
