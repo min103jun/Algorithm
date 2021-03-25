@@ -1,10 +1,13 @@
 #include <string>
+#include <algorithm>
 #include <vector>
 #include <map>
+#include <set>
 
 using namespace std;
 
 map<string, vector<int>> database;
+set<string> possiblekey;
 
 vector<string> strcat(string str, bool flag)
 {
@@ -24,6 +27,7 @@ vector<string> strcat(string str, bool flag)
             else {
                 temp.push_back(s);
                 s = "";
+
             }
         }
     }
@@ -46,6 +50,7 @@ void analyzeinfo(vector<string> str)
             for (k = 0; k < 2; k++) {
                 for (l = 0; l < 2; l++) {
                     key = strarr[0][i] + strarr[1][j] + strarr[2][k] + strarr[3][l];
+                    possiblekey.insert(key);
                     database[key].push_back(stoi(str[4]));
                 }
             }
@@ -55,17 +60,22 @@ void analyzeinfo(vector<string> str)
 
 int analyzequery(vector<string> str)
 {
+    //검색을 bs로 하면 통과할 수 있을까?
     string key = "";
     int i, sz, score = stoi(str[4]), cnt = 0;
-
+    int left, mid, right;
     for (i = 0; i < 4; i++)
         key += str[i];
 
-    sz = database[key].size();
-    for (i = 0; i < sz; i++) {
-        if (database[key][i] >= score) ++cnt;
+    left = 0;
+    right = database[key].size() - 1;
+    while (left <= right) {     
+        mid = (left + right) / 2;
+        if (database[key][mid] < score) left = mid + 1;
+        else right = mid - 1;
     }
-    return cnt;
+    
+    return database[key].size() - left;
 }
 
 vector<int> solution(vector<string> info, vector<string> query) {
@@ -75,6 +85,9 @@ vector<int> solution(vector<string> info, vector<string> query) {
     for(i = 0; i < sz; i++)
         analyzeinfo(strcat(info[i], false));
 
+    for (set<string>::iterator iter = possiblekey.begin(); iter != possiblekey.end(); ++iter) {
+        sort(database[*iter].begin(), database[*iter].end());
+    }
     sz = query.size();
     for (i = 0; i < sz; i++)
         answer.push_back(analyzequery(strcat(query[i], true)));
